@@ -1,36 +1,43 @@
-import { Outlet, Link } from "react-router-dom";
-import { Fragment, useContext } from "react";
-import { ReactComponent as CrwnLogo } from "../../assets/crown.svg";
-import "./navigation.styles.scss";
-import { signOutUser } from "../../utils/firebase/firebase.utils";
-import { UserContext } from "../../contexts/user.context";
+import { Outlet, Link } from 'react-router-dom';
+import { Fragment, useContext } from 'react';
+import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
+import './navigation.styles.scss';
+import { signOutUser } from '../../utils/firebase/firebase.utils';
+import { UserContext } from '../../contexts/user.context';
+import { CartContext } from '../../contexts/cart.context';
+import CartIcon from '../../components/cart-icon/cart-icon.component';
+import CartDropdown from '../../components/card-dropdown/cart-dropdown.component';
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
+
+  const showCartDropDown = isCartOpen && <CartDropdown />;
 
   const userState = currentUser ? (
-    <span className="nav-link" onClick={signOutUser}>
-      SIGN-OUT{" "}
+    <span className='nav-link' onClick={signOutUser}>
+      SIGN-OUT{' '}
     </span>
   ) : (
-    <Link className="nav-link" to="/auth">
+    <Link className='nav-link' to='/auth'>
       SIGN-IN
     </Link>
   );
-  //console.log(currentUser);
 
   return (
     <Fragment>
-      <div className="navigation">
-        <Link className="logo-container" to="/">
-          <CrwnLogo className="logo" />
+      <div className='navigation'>
+        <Link className='logo-container' to='/'>
+          <CrwnLogo className='logo' />
         </Link>
-        <div className="nav-links-container">
-          <Link className="nav-link" to="/shop">
+        <div className='nav-links-container'>
+          <Link className='nav-link' to='/shop'>
             SHOP
           </Link>
           {userState}
+          <CartIcon />
         </div>
+        {showCartDropDown}
       </div>
       <Outlet />
     </Fragment>
